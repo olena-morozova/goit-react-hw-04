@@ -1,23 +1,34 @@
 import { useState } from "react";
 import { Toaster } from "react-hot-toast";
+
 import { fetchImages } from "./cards-api";
 import SearchBar from "./components/SearchBar/SearchBar";
 import ImageGallery from "./components/ImageGallery/ImageGallery";
+import Loader from "./components/Loader/Loader";
+import ErrorMessage from "./components/ErrorMessage/ErrorMessage";
 
 export default function App() {
   const [query, setQuery] = useState("");
   const [images, setImages] = useState([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const handleSearch = async (newQuery) => {
     if (newQuery === query) return;
 
     setQuery(newQuery);
+    setImages([]);
+    setError(false);
+    setLoading(true);
     try {
       const response = await fetchImages(newQuery, 1);
-      console.log("Response from fetchImages:", response); // тимчасово — дивимось, що приходить
-      setImages(response.images); // або response.images, якщо ти зміниш API
+      //console.log("Response from fetchImages:", response); // тимчасово — дивимось, що приходить
+      setImages(response.images);
     } catch (error) {
       console.error("Помилка запиту:", error.message);
+      setError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -25,12 +36,26 @@ export default function App() {
     <div>
       <SearchBar onSubmit={handleSearch} />
       <Toaster position="top-right" />
-      <ImageGallery cards={images} />
+      {loading && <Loader />}
+      {error && <ErrorMessage />}
+      {images.length > 0 && <ImageGallery cards={images} />}
     </div>
   );
 }
 
-/*import { useState } from 'react'
+/*
+
+
+       {error ? (
+        <ErrorMessage />
+      ) : (
+        <>
+          {images.length > 0 && <ImageGallery cards={images} />}
+          {loading && <Loader />}
+        </>
+      )}
+
+import { useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from '/vite.svg'
 import './App.css'
