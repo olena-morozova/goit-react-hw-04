@@ -12,8 +12,15 @@ export async function fetchImages(query, currentPage) {
     },
   });
 
+  const images = response.data.results.map((item) => ({
+    id: item.id,
+    smallUrl: item.urls.small,
+    largeUrl: item.urls.full,
+    description: item.alt_description || "No description",
+  }));
+
   return {
-    images: response.data.results,
+    images,
     total: response.data.total,
   };
 }
