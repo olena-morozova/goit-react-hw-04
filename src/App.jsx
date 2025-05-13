@@ -35,11 +35,9 @@ export default function App() {
 
     try {
       const response = await fetchImages(newQuery, 1);
-      console.log("Response from fetchImages:", response); // тимчасово — дивимось, що приходить
       setImages(response.images);
       setTotal(response.total);
-    } catch (error) {
-      console.error("Помилка запиту:", error.message);
+    } catch {
       setError(true);
     } finally {
       setLoading(false);
@@ -55,8 +53,7 @@ export default function App() {
       setImages((prev) => [...prev, ...response.images]);
       setPage(nextPage);
       setTotal(response.total);
-    } catch (error) {
-      console.log("Помилка при завантаженні ще зображень:", error.message);
+    } catch {
       setError(true);
     } finally {
       setLoading(false);
@@ -64,7 +61,7 @@ export default function App() {
   };
 
   useEffect(() => {
-    if (page === 1) return; // не скролимо після першого запиту
+    if (page === 1) return;
 
     const cardHeight = document
       .querySelector("ul > li")
@@ -72,7 +69,7 @@ export default function App() {
 
     if (cardHeight) {
       window.scrollBy({
-        top: cardHeight * 3, // приблизно висота одного рядка з 3 картками
+        top: cardHeight * 3,
         behavior: "smooth",
       });
     }
@@ -84,12 +81,9 @@ export default function App() {
     }
   }, [selectedImage]);
 
-  //console.log(selectedImage);
-  const openModal = (largeUrl) => {
-    if (selectedImage === largeUrl) return;
-    console.log("Клік по картці Url:", largeUrl);
-    setSelectImage(largeUrl);
-    //setIsModalOpen(true);
+  const openModal = (card) => {
+    if (selectedImage?.id === card.id) return;
+    setSelectImage(card);
   };
 
   const closeModal = () => {
@@ -115,70 +109,12 @@ export default function App() {
         <LoadMoreBtn onClick={handleLoadMore} />
       )}
       {isModalOpen && (
-        <>
-          {console.log("Модалка має відкриватися")}
-          <ImageModal
-            isOpen={isModalOpen}
-            onClose={closeModal}
-            image={selectedImage}
-          />
-        </>
+        <ImageModal
+          isOpen={isModalOpen}
+          onClose={closeModal}
+          image={selectedImage}
+        />
       )}
     </div>
   );
 }
-
-/*
-
-
-       {error ? (
-        <ErrorMessage />
-      ) : (
-        <>
-          {images.length > 0 && <ImageGallery cards={images} />}
-          {loading && <Loader />}
-        </>
-      )}
-
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
-
-<ImageGallery cards={images} />
-
-fetch("https://api.unsplash.com/search/photos?query=cat&client_id=zRaCiU2tTRtoQWRD8gVnR0BZl4aKEhF9RQ7L9-gsK8E")
-  .then(res => res.json())
-  .then(data => console.log(data));
-
-function App() {
-  const [count, setCount] = useState(0)
-
-  return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
-}
-
-export default App
-*/

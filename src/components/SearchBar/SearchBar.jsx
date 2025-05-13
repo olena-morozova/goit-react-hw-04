@@ -11,11 +11,13 @@ export default function SearchBar({ onSubmit }) {
     const trimmedQuery = query.trim();
 
     if (!trimmedQuery) {
-      toast.error("Please enter a search term!");
+      toast.error("Please enter a search term!", {
+        duration: 2000,
+      });
       return;
     }
-    onSubmit(trimmedQuery); //передаємо в Арр
-    setQuery(""); //очищаємо інпут
+    onSubmit(trimmedQuery);
+    setQuery("");
   };
 
   return (

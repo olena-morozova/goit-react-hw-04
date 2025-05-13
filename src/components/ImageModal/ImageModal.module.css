@@ -1,9 +1,17 @@
 .modalImage {
-  max-width: 60vw;
+  max-width: 100%;
+  max-height: 80vh;
+  width: auto;
   height: auto;
-  max-height: 800px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto;
 }
-/*.Overlay {
+
+.infoBox {
+  padding-left: 16px;
+}
+.overlay {
   background-color: rgba(0, 0, 0, 0.8);
   position: fixed;
   top: 0;
@@ -11,14 +19,3 @@
   right: 0;
   bottom: 0;
 }
-
-.Modal {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  background: white;
-  padding: 10px;
-  outline: none;
-  border-radius: 8px;
-}*/

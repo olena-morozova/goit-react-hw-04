@@ -16,7 +16,10 @@ export async function fetchImages(query, currentPage) {
     id: item.id,
     smallUrl: item.urls.small,
     largeUrl: item.urls.full,
-    description: item.alt_description || "No description",
+    alt: item.alt_description || "No description",
+    description: item.description || "No title",
+    author: item.user.name,
+    likes: item.likes,
   }));
 
   return {
@@ -24,15 +27,3 @@ export async function fetchImages(query, currentPage) {
     total: response.data.total,
   };
 }
-/*export async function fetchImages(query) {
-  const response = await fetch(
-    `https://api.unsplash.com/search/photos?query=${query}&per_page=12&client_id=${ACCESS_KEY}`
-  );
-
-  if (!response.ok) {
-    throw new Error("Помилка при завантаженні зображень");
-  }
-
-  const data = await response.json();
-  return data.results;
-}*/
